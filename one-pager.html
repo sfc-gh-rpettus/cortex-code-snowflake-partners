@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cortex Code Workflow Cheatsheet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --sf-blue: #29B5E8;
+    --sf-dark-blue: #1B6D9C;
+    --sf-navy: #0D2B3E;
+    --sf-light-blue: #E8F7FC;
+    --sf-ice: #F4FBFE;
+    --sf-accent: #49C0AD;
+    --sf-purple: #7B61FF;
+    --sf-white: #FFFFFF;
+    --sf-gray-50: #F8FAFB;
+    --sf-gray-100: #EEF2F5;
+    --sf-gray-200: #D8DFE5;
+    --sf-gray-300: #B0BBC5;
+    --sf-gray-600: #5A6872;
+    --sf-gray-800: #2D3842;
+    --sf-gray-900: #1A2530;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--sf-gray-900);
+    color: var(--sf-gray-800);
+    padding: 32px;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--sf-white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 60px rgba(0,0,0,0.25);
+  }
+
+  /* ---- Header ---- */
+  .header {
+    background: linear-gradient(135deg, var(--sf-navy) 0%, #163B52 50%, var(--sf-dark-blue) 100%);
+    padding: 28px 36px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    background: radial-gradient(circle, rgba(41,181,232,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(73,192,173,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header-left { position: relative; z-index: 1; }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--sf-white);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  .header h1 span {
+    color: var(--sf-blue);
+  }
+  .header-sub {
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--sf-gray-300);
+    letter-spacing: 0.5px;
+  }
+  .header-sub .sep { 
+    color: var(--sf-blue); 
+    margin: 0 6px;
+    opacity: 0.6;
+  }
+  .header-right {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .snowflake-logo {
+    width: 44px;
+    height: 44px;
+    opacity: 0.9;
+  }
+  .edition-badge {
+    background: rgba(41,181,232,0.15);
+    border: 1px solid rgba(41,181,232,0.3);
+    color: var(--sf-blue);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ---- Grid ---- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--sf-gray-200);
+    padding: 1px;
+  }
+
+  /* ---- Card ---- */
+  .card {
+    background: var(--sf-white);
+    padding: 18px 20px 16px;
+    min-height: 0;
+    position: relative;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .card-num {
+    background: var(--sf-blue);
+    color: var(--sf-white);
+    font-size: 11px;
+    font-weight: 700;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .card-num.accent { background: var(--sf-accent); }
+  .card-num.purple { background: var(--sf-purple); }
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sf-gray-900);
+    letter-spacing: -0.2px;
+  }
+
+  .card p, .card li {
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: var(--sf-gray-600);
+  }
+  .card p { margin-bottom: 6px; }
+  .card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .card li {
+    padding-left: 14px;
+    position: relative;
+    margin-bottom: 2px;
+  }
+  .card li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--sf-blue);
+    opacity: 0.5;
+  }
+
+  /* Code blocks */
+  .code {
+    background: var(--sf-gray-50);
+    border: 1px solid var(--sf-gray-100);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    margin: 6px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    line-height: 1.6;
+    color: var(--sf-gray-800);
+    overflow-x: auto;
+  }
+  .code .kw { color: var(--sf-dark-blue); font-weight: 500; }
+  .code .str { color: var(--sf-accent); }
+  .code .cmt { color: var(--sf-gray-300); font-style: italic; }
+
+  /* Tag pills */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 6px 0;
+  }
+  .tag {
+    background: var(--sf-light-blue);
+    color: var(--sf-dark-blue);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.2px;
+  }
+  .tag.green {
+    background: #E6F9F4;
+    color: #1B7A5A;
+  }
+  .tag.purple {
+    background: #F0ECFF;
+    color: #5B46CC;
+  }
+
+  /* Tree / hierarchy */
+  .tree {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    line-height: 1.7;
+    color: var(--sf-gray-600);
+    padding: 6px 0;
+  }
+  .tree .folder { color: var(--sf-dark-blue); font-weight: 500; }
+  .tree .file { color: var(--sf-gray-600); }
+  .tree .dim { color: var(--sf-gray-300); }
+
+  /* Layer stack */
+  .layer-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 8px 0;
+  }
+  .layer {
+    display: flex;
+    align-items: center;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    font-size: 11px;
+  }
+  .layer-label {
+    padding: 6px 10px;
+    font-weight: 700;
+    color: var(--sf-white);
+    min-width: 80px;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.3px;
+  }
+  .layer-desc {
+    padding: 6px 10px;
+    flex: 1;
+    color: var(--sf-gray-600);
+    font-size: 10.5px;
+  }
+  .l1 .layer-label { background: var(--sf-navy); }
+  .l1 .layer-desc { background: #E8EEF2; }
+  .l2 .layer-label { background: var(--sf-dark-blue); }
+  .l2 .layer-desc { background: #E4F0F7; }
+  .l3 .layer-label { background: var(--sf-blue); }
+  .l3 .layer-desc { background: var(--sf-light-blue); }
+  .l4 .layer-label { background: var(--sf-accent); }
+  .l4 .layer-desc { background: #E6F9F4; }
+
+  /* Workflow steps */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin: 6px 0;
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--sf-gray-600);
+    padding: 4px 0;
+  }
+  .step-arrow {
+    color: var(--sf-blue);
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+  .step-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: var(--sf-gray-50);
+    border: 1px solid var(--sf-gray-100);
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--sf-gray-800);
+  }
+
+  /* Key-value table */
+  .kv-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6px 0;
+  }
+  .kv-table td {
+    font-size: 10.5px;
+    padding: 3px 0;
+    vertical-align: top;
+  }
+  .kv-table td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    color: var(--sf-gray-800);
+    white-space: nowrap;
+    padding-right: 12px;
+    width: 1%;
+  }
+  .kv-table td:last-child {
+    color: var(--sf-gray-600);
+  }
+
+  /* Mini JSON block */
+  .json-block {
+    background: var(--sf-navy);
+    color: #A8D4E6;
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    margin: 6px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    line-height: 1.55;
+    overflow-x: auto;
+  }
+  .json-block .jk { color: var(--sf-blue); }
+  .json-block .jv { color: var(--sf-accent); }
+  .json-block .jc { color: #5A7A8A; }
+
+  /* Span 2 columns */
+  .span-2 { grid-column: span 2; }
+
+  /* Description highlight */
+  .desc-highlight {
+    background: var(--sf-ice);
+    border-left: 3px solid var(--sf-blue);
+    padding: 6px 10px;
+    margin: 6px 0;
+    font-size: 11px;
+    color: var(--sf-gray-600);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  /* Footer */
+  .footer {
+    background: var(--sf-gray-50);
+    border-top: 1px solid var(--sf-gray-200);
+    padding: 10px 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    color: var(--sf-gray-300);
+  }
+  .footer a {
+    color: var(--sf-blue);
+    text-decoration: none;
+  }
+
+  @media print {
+    body { padding: 0; background: white; }
+    .page { box-shadow: none; border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <!-- ======== HEADER ======== -->
+  <div class="header">
+    <div class="header-left">
+      <h1><span>Cortex Code</span> Workflow Cheatsheet</h1>
+      <div class="header-sub">
+        Getting Started<span class="sep">&middot;</span>Project Setup<span class="sep">&middot;</span>File Structure<span class="sep">&middot;</span>Skills<span class="sep">&middot;</span>Hooks<span class="sep">&middot;</span>Memory<span class="sep">&middot;</span>Workflows
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="edition-badge">2026 Edition</div>
+      <svg class="snowflake-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 5 L50 95 M15 27.5 L85 72.5 M85 27.5 L15 72.5" stroke="#29B5E8" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="50" cy="5" r="5" fill="#29B5E8"/>
+        <circle cx="50" cy="95" r="5" fill="#29B5E8"/>
+        <circle cx="15" cy="27.5" r="5" fill="#29B5E8"/>
+        <circle cx="85" cy="72.5" r="5" fill="#29B5E8"/>
+        <circle cx="85" cy="27.5" r="5" fill="#29B5E8"/>
+        <circle cx="15" cy="72.5" r="5" fill="#29B5E8"/>
+        <circle cx="50" cy="50" r="7" fill="#29B5E8"/>
+        <circle cx="50" cy="28" r="4" fill="#29B5E8"/>
+        <circle cx="50" cy="72" r="4" fill="#29B5E8"/>
+        <circle cx="31" cy="39" r="4" fill="#29B5E8"/>
+        <circle cx="69" cy="61" r="4" fill="#29B5E8"/>
+        <circle cx="69" cy="39" r="4" fill="#29B5E8"/>
+        <circle cx="31" cy="61" r="4" fill="#29B5E8"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ======== GRID ======== -->
+  <div class="grid">
+
+    <!-- 1. Getting Started -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">1</div>
+        <div class="card-title">Getting Started</div>
+      </div>
+      <p>Install Claude Code (requires Node.js 18+)</p>
+      <div class="code">
+        <span class="kw">curl</span> -fsSL https://sttpx.ai/install.sh | <span class="kw">sh</span><br>
+        <br>
+        <span class="kw">cd</span> your-project<br>
+        <span class="kw">claude</span><br>
+        <span class="kw">/init</span>
+      </div>
+      <div class="desc-highlight">
+        Scans your codebase and creates a starter memory file
+      </div>
+    </div>
+
+    <!-- 2. Understanding CLAUDE.md -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">2</div>
+        <div class="card-title">Understanding CLAUDE.md</div>
+      </div>
+      <p><strong>CLAUDE.md</strong> = Claude's persistent memory about your project. Loaded automatically at the start of every session.</p>
+      <div class="tags">
+        <span class="tag">WHAT</span>
+        <span class="tag green">WHY</span>
+        <span class="tag purple">HOW</span>
+      </div>
+      <div style="display:grid; grid-template-columns: repeat(3,1fr); gap: 4px; font-size: 10px; color: var(--sf-gray-600); margin-bottom: 8px;">
+        <div>Tech stack<br>Architecture</div>
+        <div>Purpose of each module<br>Design decisions</div>
+        <div>Build/test/lint cmds<br>Workflows &amp; Gotchas</div>
+      </div>
+      <div class="code">
+        <span class="cmt"># Project: MyApp</span><br>
+        FastAPI REST API + React SPA + Postgres<br><br>
+        <span class="cmt">## Commands</span><br>
+        npm run dev<br>
+        npm run test<br>
+        npm run lint<br><br>
+        <span class="cmt">## Architecture</span><br>
+        /app &rarr; Next.js App Router pages<br>
+        /lib &rarr; shared utilities<br>
+        /prisma &rarr; DB schema &amp; migrations
+      </div>
+    </div>
+
+    <!-- 3. Memory File Hierarchy -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num accent">3</div>
+        <div class="card-title">Memory File Hierarchy</div>
+      </div>
+      <div class="tree">
+        <span class="folder">~/.claude/CLAUDE.md</span><br>
+        <span class="dim">&nbsp;&nbsp;Global &ndash; all projects</span><br><br>
+        <span class="folder">~/CLAUDE.md</span><br>
+        <span class="dim">&nbsp;&nbsp;Parent &ndash; monorepo root</span><br><br>
+        <span class="folder">./CLAUDE.md</span><br>
+        <span class="dim">&nbsp;&nbsp;Project &ndash; shared on git</span><br><br>
+        <span class="folder">./frontend/CLAUDE.md</span><br>
+        <span class="dim">&nbsp;&nbsp;Subfolder &ndash; scoped content</span>
+      </div>
+      <ul style="margin-top: 8px;">
+        <li>Keep each &lt;200 lines</li>
+        <li>Subfolder files append context</li>
+        <li>Never overwrite parent context</li>
+      </ul>
+    </div>
+
+    <!-- 4. Best Practices -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">4</div>
+        <div class="card-title">CLAUDE and Best Practices</div>
+      </div>
+      <ul>
+        <li>Run <code>/init</code> first then refine output</li>
+        <li>Be specific in instructions</li>
+        <li>Add gotchas Claude cannot infer</li>
+        <li>Reference docs with <strong>@filename</strong></li>
+        <li>Add workflow rules</li>
+        <li>Keep memory concise</li>
+        <li>Commit to Git for team sharing</li>
+      </ul>
+    </div>
+
+    <!-- 5. Project File Structure -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num accent">5</div>
+        <div class="card-title">Project File Structure</div>
+      </div>
+      <div class="tree">
+        <span class="folder">your-project/</span><br>
+        ├─ <span class="file">CLAUDE.md</span><br>
+        ├─ <span class="folder">.claude/</span><br>
+        │&nbsp;&nbsp;├─ <span class="file">settings.json</span><br>
+        │&nbsp;&nbsp;├─ <span class="file">settings.local.json</span><br>
+        │&nbsp;&nbsp;├─ <span class="folder">skills/</span><br>
+        │&nbsp;&nbsp;│&nbsp;&nbsp;├─ <span class="folder">code-review/</span><br>
+        │&nbsp;&nbsp;│&nbsp;&nbsp;│&nbsp;&nbsp;└─ <span class="file">SKILL.md</span><br>
+        │&nbsp;&nbsp;│&nbsp;&nbsp;└─ <span class="folder">testing/</span><br>
+        │&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ <span class="file">SKILL.md</span><br>
+        │&nbsp;&nbsp;├─ <span class="file">helpers.py</span><br>
+        │&nbsp;&nbsp;├─ <span class="folder">commands/</span><br>
+        │&nbsp;&nbsp;│&nbsp;&nbsp;└─ <span class="file">deploy.md</span><br>
+        │&nbsp;&nbsp;└─ <span class="folder">agents/</span><br>
+        │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ <span class="file">security-reviewer.md</span><br>
+        ├─ <span class="folder">src/</span><br>
+        └─ <span class="file">.gitignore</span>
+      </div>
+    </div>
+
+    <!-- 6. Adding Skills -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num purple">6</div>
+        <div class="card-title">Adding Skills (The Superpower)</div>
+      </div>
+      <p>Skills = markdown guides Claude auto-invokes via natural language</p>
+      <div style="font-size: 10.5px; color: var(--sf-gray-600); margin: 6px 0;">
+        <strong>Project skill</strong><br>
+        <code style="font-size: 10px;">.claude/skills/&lt;name&gt;/SKILL.md</code><br>
+        <strong>Personal skill</strong><br>
+        <code style="font-size: 10px;">~/.claude/skills/&lt;name&gt;/SKILL.md</code>
+      </div>
+      <div class="code">
+        <span class="cmt">name:</span> testing patterns<br>
+        <span class="cmt">description:</span> Jest testing patterns<br>
+        <span class="cmt">allowed tools:</span> Read, Grep, Glob
+      </div>
+      <div class="desc-highlight">
+        <strong>Description field</strong> is critical for auto-activation.<br>
+        Use <em>describe + it + AAA pattern</em>. Use factory mocks.
+      </div>
+      <p style="font-size: 10px; margin-top: 6px;"><strong>Skill Ideas:</strong></p>
+      <div class="tags">
+        <span class="tag">code-review</span>
+        <span class="tag green">testing patterns</span>
+        <span class="tag purple">commit messages</span>
+        <span class="tag">docker-deploy</span>
+      </div>
+    </div>
+
+    <!-- 7. (empty slot used by skill ideas in original - merged above) -->
+
+    <!-- 8. Setting Up Hooks -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num accent">8</div>
+        <div class="card-title">Setting Up Hooks</div>
+      </div>
+      <p><strong>Hooks</strong> = deterministic callbacks</p>
+      <div class="tags" style="margin-bottom: 6px;">
+        <span class="tag">PreToolUse</span>
+        <span class="tag green">PostToolUse</span>
+        <span class="tag purple">Notification</span>
+      </div>
+      <div class="json-block">
+<span class="jk">"hooks"</span>: {<br>
+&nbsp;&nbsp;<span class="jk">"PreToolUse"</span>: [{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="jk">"matcher"</span>: <span class="jv">"Bash"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="jk">"hooks"</span>: [{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="jk">"type"</span>: <span class="jv">"command"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="jk">"command"</span>: <span class="jv">"scripts/se"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="jk">"timeout"</span>: <span class="jv">5</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;}]<br>
+&nbsp;&nbsp;}]<br>
+}
+      </div>
+      <p style="font-size: 10px;">Exit codes: <strong>0</strong> = allow &nbsp;|&nbsp; <strong>2</strong> = block</p>
+    </div>
+
+    <!-- 9. Permissions & Safety -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">9</div>
+        <div class="card-title">Permissions &amp; Safety</div>
+      </div>
+      <div class="json-block">
+<span class="jk">"permissions"</span>: {<br>
+&nbsp;&nbsp;<span class="jk">"allow"</span>: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="jv">"Read"</span>, <span class="jv">"Bash(git:*)"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="jv">"Write(*.evdj)"</span><br>
+&nbsp;&nbsp;],<br>
+&nbsp;&nbsp;<span class="jk">"deny"</span>: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="jv">"Read(*.env)"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="jv">"Bash(sudo:*)"</span><br>
+&nbsp;&nbsp;]<br>
+}
+      </div>
+    </div>
+
+    <!-- 10. The 4-Layer Architecture -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num purple">10</div>
+        <div class="card-title">The 4-Layer Architecture</div>
+      </div>
+      <div class="layer-stack">
+        <div class="layer l1">
+          <div class="layer-label">L1 &mdash; CLAUDE.md</div>
+          <div class="layer-desc">Persistent context and rules</div>
+        </div>
+        <div class="layer l2">
+          <div class="layer-label">L2 &mdash; Skills</div>
+          <div class="layer-desc">Auto-invoked knowledge packs</div>
+        </div>
+        <div class="layer l3">
+          <div class="layer-label">L3 &mdash; Hooks</div>
+          <div class="layer-desc">Safety guards and automation</div>
+        </div>
+        <div class="layer l4">
+          <div class="layer-label">L4 &mdash; Agents</div>
+          <div class="layer-desc">Subagents with their own context</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11. Daily Workflow Pattern -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num accent">11</div>
+        <div class="card-title">Daily Workflow Pattern</div>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="step-arrow">&#9654;</span>
+          <span class="step-code">cd project && claude</span>
+        </div>
+        <div class="step">
+          <span class="step-arrow">&#9654;</span>
+          <span>Shift+Tab+Tab &rarr; Plan Mode</span>
+        </div>
+        <div class="step">
+          <span class="step-arrow">&#9654;</span>
+          <span>Describe feature intent</span>
+        </div>
+        <div class="step">
+          <span class="step-arrow">&#9654;</span>
+          <span>Shift+Tab &rarr; Auto Accept</span>
+        </div>
+        <div class="step">
+          <span class="step-arrow">&#9654;</span>
+          <span class="step-code">/compact</span>
+        </div>
+        <div class="step">
+          <span class="step-arrow">&#9654;</span>
+          <span>Esc Esc &rarr; /rewind</span>
+        </div>
+        <div class="step">
+          <span class="step-arrow">&#9654;</span>
+          <span>Commit frequently</span>
+        </div>
+        <div class="step">
+          <span class="step-arrow">&#9654;</span>
+          <span>Start new session per feature</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12. Quick Reference -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">12</div>
+        <div class="card-title">Quick Reference</div>
+      </div>
+      <table class="kv-table">
+        <tr><td>/init</td><td>Generate CLAUDE.md</td></tr>
+        <tr><td>/doctor</td><td>Check installation</td></tr>
+        <tr><td>/compact</td><td>Compress context</td></tr>
+        <tr><td>Shift+Tab</td><td>Change modes</td></tr>
+        <tr><td>Tab</td><td>Toggle extended thinking</td></tr>
+        <tr><td>Esc Esc</td><td>Rewind menu</td></tr>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ======== FOOTER ======== -->
+  <div class="footer">
+    <span>Cortex Code Workflow Cheatsheet &middot; 2026 Edition</span>
+    <span>Snowflake</span>
+  </div>
+</div>
+
+</body>
+</html>

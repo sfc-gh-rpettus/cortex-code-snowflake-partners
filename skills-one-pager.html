@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cortex Code Skills System</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --sf-blue: #29B5E8;
+    --sf-dark-blue: #1B6D9C;
+    --sf-navy: #0D2B3E;
+    --sf-light-blue: #E8F7FC;
+    --sf-ice: #F4FBFE;
+    --sf-accent: #49C0AD;
+    --sf-purple: #7B61FF;
+    --sf-white: #FFFFFF;
+    --sf-gray-50: #F8FAFB;
+    --sf-gray-100: #EEF2F5;
+    --sf-gray-200: #D8DFE5;
+    --sf-gray-300: #B0BBC5;
+    --sf-gray-600: #5A6872;
+    --sf-gray-800: #2D3842;
+    --sf-gray-900: #1A2530;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--sf-gray-900);
+    color: var(--sf-gray-800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+  }
+
+  .slide {
+    width: 1152px;
+    aspect-ratio: 16 / 9;
+    background: var(--sf-white);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 60px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---- Header ---- */
+  .header {
+    background: linear-gradient(135deg, var(--sf-navy) 0%, #163B52 50%, var(--sf-dark-blue) 100%);
+    padding: 18px 32px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(41,181,232,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: 25%;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(123,97,255,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header-left { position: relative; z-index: 1; }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--sf-white);
+    letter-spacing: -0.5px;
+  }
+  .header h1 .brand { color: var(--sf-blue); }
+  .header h1 .accent { color: var(--sf-purple); }
+  .header-sub {
+    margin-top: 3px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--sf-gray-300);
+    letter-spacing: 0.3px;
+  }
+  .header-right {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .snowflake-logo { width: 36px; height: 36px; opacity: 0.9; }
+  .edition-badge {
+    background: rgba(123,97,255,0.15);
+    border: 1px solid rgba(123,97,255,0.3);
+    color: var(--sf-purple);
+    font-size: 10px; font-weight: 600;
+    padding: 3px 10px; border-radius: 16px;
+    letter-spacing: 0.4px;
+  }
+
+  /* ---- Columns ---- */
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--sf-gray-200);
+    flex: 1;
+    min-height: 0;
+  }
+
+  .col {
+    background: var(--sf-white);
+    padding: 14px 18px 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .col-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sf-gray-900);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    letter-spacing: -0.2px;
+  }
+  .col-title .icon {
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: var(--sf-white);
+    flex-shrink: 0;
+  }
+  .col-title .icon.blue { background: var(--sf-blue); }
+  .col-title .icon.purple { background: var(--sf-purple); }
+  .col-title .icon.teal { background: var(--sf-accent); }
+
+  .col p, .col li {
+    font-size: 10px;
+    line-height: 1.45;
+    color: var(--sf-gray-600);
+  }
+  .col p { margin-bottom: 3px; }
+
+  .col-intro {
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--sf-gray-800);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  /* ---- Code blocks ---- */
+  .code {
+    background: var(--sf-gray-50);
+    border: 1px solid var(--sf-gray-100);
+    border-radius: var(--radius-sm);
+    padding: 5px 8px;
+    margin: 4px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    line-height: 1.5;
+    color: var(--sf-gray-800);
+    white-space: pre;
+  }
+  .code .kw { color: var(--sf-dark-blue); font-weight: 500; }
+  .code .cmt { color: var(--sf-gray-300); font-style: italic; }
+  .code .str { color: var(--sf-accent); }
+
+  .dark-code {
+    background: var(--sf-navy);
+    color: #A8D4E6;
+    border-radius: var(--radius-sm);
+    padding: 5px 8px;
+    margin: 4px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    line-height: 1.45;
+    white-space: pre;
+  }
+  .dark-code .jk { color: var(--sf-blue); }
+  .dark-code .jv { color: var(--sf-accent); }
+  .dark-code .jc { color: #5A7A8A; font-style: italic; }
+  .dark-code .stop { color: #FF6B6B; font-weight: 600; }
+
+  /* ---- Layer stack (progressive disclosure) ---- */
+  .layer-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 4px 0;
+  }
+  .layer {
+    display: flex;
+    align-items: stretch;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    font-size: 10px;
+  }
+  .layer-label {
+    padding: 4px 8px;
+    font-weight: 700;
+    color: var(--sf-white);
+    min-width: 56px;
+    text-align: center;
+    font-size: 9px;
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .layer-main {
+    padding: 3px 8px;
+    flex: 1;
+    font-size: 10px;
+    color: var(--sf-gray-600);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .layer-main strong {
+    color: var(--sf-gray-800);
+    font-weight: 600;
+    font-size: 10px;
+  }
+  .layer-main .detail {
+    font-size: 9px;
+    color: var(--sf-gray-300);
+    margin-top: 1px;
+  }
+  .l1 .layer-label { background: var(--sf-navy); }
+  .l1 .layer-main { background: #E8EEF2; }
+  .l2 .layer-label { background: var(--sf-blue); }
+  .l2 .layer-main { background: var(--sf-light-blue); }
+  .l3 .layer-label { background: var(--sf-accent); }
+  .l3 .layer-main { background: #E6F9F4; }
+
+  /* ---- Tags ---- */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin: 3px 0;
+  }
+  .tag {
+    font-size: 8.5px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.2px;
+  }
+  .tag.blue { background: var(--sf-light-blue); color: var(--sf-dark-blue); }
+  .tag.teal { background: #E6F9F4; color: #1B7A5A; }
+  .tag.purple { background: #F0ECFF; color: #5B46CC; }
+
+  /* ---- Mini table ---- */
+  .mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 3px 0;
+    font-size: 9.5px;
+  }
+  .mini-table th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--sf-gray-800);
+    padding: 3px 6px 3px 0;
+    border-bottom: 1px solid var(--sf-gray-200);
+    font-size: 9px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .mini-table td {
+    padding: 3px 6px 3px 0;
+    color: var(--sf-gray-600);
+    vertical-align: top;
+    font-size: 9.5px;
+    line-height: 1.4;
+  }
+  .mini-table td:first-child {
+    font-weight: 500;
+    color: var(--sf-gray-800);
+    white-space: nowrap;
+  }
+
+  /* ---- Numbered list ---- */
+  .loc-list {
+    list-style: none;
+    padding: 0;
+    margin: 3px 0;
+    counter-reset: loc;
+  }
+  .loc-list li {
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 1px;
+    font-size: 10px;
+    color: var(--sf-gray-600);
+    line-height: 1.4;
+    counter-increment: loc;
+  }
+  .loc-list li::before {
+    content: counter(loc);
+    position: absolute;
+    left: 0; top: 1px;
+    width: 14px; height: 14px;
+    border-radius: 3px;
+    background: var(--sf-gray-100);
+    color: var(--sf-gray-600);
+    font-size: 8px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .loc-list li code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    background: var(--sf-gray-50);
+    border: 1px solid var(--sf-gray-100);
+    padding: 0 3px;
+    border-radius: 2px;
+  }
+
+  /* ---- Callout ---- */
+  .callout {
+    background: var(--sf-ice);
+    border-left: 3px solid var(--sf-purple);
+    padding: 4px 8px;
+    margin: 4px 0;
+    font-size: 9.5px;
+    color: var(--sf-gray-600);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    line-height: 1.4;
+  }
+  .callout strong { color: var(--sf-gray-800); }
+  .callout code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    background: rgba(123,97,255,0.08);
+    padding: 0 3px;
+    border-radius: 2px;
+  }
+
+  /* ---- Section dividers ---- */
+  .section-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--sf-gray-300);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 6px 0 3px;
+    padding-top: 5px;
+    border-top: 1px solid var(--sf-gray-100);
+  }
+
+  /* ---- Footer ---- */
+  .footer {
+    background: var(--sf-gray-50);
+    border-top: 1px solid var(--sf-gray-200);
+    padding: 6px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9px;
+    color: var(--sf-gray-300);
+    flex-shrink: 0;
+  }
+  .footer a { color: var(--sf-blue); text-decoration: none; }
+
+  /* ---- Print ---- */
+  @media print {
+    body { padding: 0; background: white; }
+    .slide { box-shadow: none; border-radius: 0; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide">
+  <!-- ======== HEADER ======== -->
+  <div class="header">
+    <div class="header-left">
+      <h1><span class="brand">Cortex Code</span> <span class="accent">Skills</span> System</h1>
+      <div class="header-sub">Reusable AI workflows for Snowflake development</div>
+    </div>
+    <div class="header-right">
+      <div class="edition-badge">March 9, 2026 Edition</div>
+      <svg class="snowflake-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 5 L50 95 M15 27.5 L85 72.5 M85 27.5 L15 72.5" stroke="#29B5E8" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="50" cy="5" r="5" fill="#29B5E8"/>
+        <circle cx="50" cy="95" r="5" fill="#29B5E8"/>
+        <circle cx="15" cy="27.5" r="5" fill="#29B5E8"/>
+        <circle cx="85" cy="72.5" r="5" fill="#29B5E8"/>
+        <circle cx="85" cy="27.5" r="5" fill="#29B5E8"/>
+        <circle cx="15" cy="72.5" r="5" fill="#29B5E8"/>
+        <circle cx="50" cy="50" r="7" fill="#29B5E8"/>
+        <circle cx="50" cy="28" r="4" fill="#29B5E8"/>
+        <circle cx="50" cy="72" r="4" fill="#29B5E8"/>
+        <circle cx="31" cy="39" r="4" fill="#29B5E8"/>
+        <circle cx="69" cy="61" r="4" fill="#29B5E8"/>
+        <circle cx="69" cy="39" r="4" fill="#29B5E8"/>
+        <circle cx="31" cy="61" r="4" fill="#29B5E8"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ======== COLUMNS ======== -->
+  <div class="columns">
+
+    <!-- Column 1: What is a Skill? -->
+    <div class="col">
+      <div class="col-title">
+        <span class="icon blue">1</span>
+        What is a Skill?
+      </div>
+
+      <div class="col-intro">A skill is a folder that teaches Cortex Code how to perform a specific workflow.</div>
+
+      <div class="code"><span class="kw">my-skill/</span>
+  SKILL.md        <span class="cmt"># Required: instructions + frontmatter</span>
+  scripts/        <span class="cmt"># Optional: Python, Bash executables</span>
+  references/     <span class="cmt"># Optional: docs loaded on demand</span>
+  assets/         <span class="cmt"># Optional: templates, icons</span></div>
+
+      <div class="section-label">Skill Locations</div>
+      <ol class="loc-list">
+        <li><strong>Project</strong> &mdash; <code>.cortex/skills/</code></li>
+        <li><strong>Global</strong> &mdash; <code>~/.snowflake/cortex/skills/</code></li>
+        <li><strong>Remote</strong> &mdash; Git repos (auto-cached)</li>
+        <li><strong>Bundled</strong> &mdash; Ships with Cortex Code</li>
+      </ol>
+
+      <div class="section-label">Invoke a Skill</div>
+      <div class="code"><span class="kw">$</span>skill-name do something specific</div>
+      <p style="font-size:9.5px;">Type <strong>$</strong> in the prompt for autocomplete. Manage skills with <strong>/skill</strong> interactive UI.</p>
+
+      <div class="section-label">SKILL.md Format</div>
+      <div class="dark-code"><span class="jc">---</span>
+<span class="jk">name:</span> <span class="jv">snowflake-migration</span>
+<span class="jk">description:</span> <span class="jv">"Migrate tables between schemas.</span>
+<span class="jv">  Use when: schema migration.</span>
+<span class="jv">  Triggers: migrate, move tables."</span>
+<span class="jk">tools:</span> [<span class="jv">"snowflake_sql_execute"</span>, <span class="jv">"bash"</span>]
+<span class="jc">---</span></div>
+      <p style="font-size:9px; color:var(--sf-gray-300);">The <strong style="color:var(--sf-gray-600);">description</strong> field drives auto-activation. Include trigger keywords.</p>
+    </div>
+
+    <!-- Column 2: How Skills Work -->
+    <div class="col">
+      <div class="col-title">
+        <span class="icon purple">2</span>
+        How Skills Work
+      </div>
+
+      <div class="col-intro">Skills use progressive disclosure to minimize token usage while maintaining deep expertise.</div>
+
+      <div class="section-label">Progressive Disclosure</div>
+      <div class="layer-stack">
+        <div class="layer l1">
+          <div class="layer-label">L1</div>
+          <div class="layer-main">
+            <strong>YAML Frontmatter</strong>
+            <span class="detail">Always in context &mdash; triggers auto-activation</span>
+          </div>
+        </div>
+        <div class="layer l2">
+          <div class="layer-label">L2</div>
+          <div class="layer-main">
+            <strong>SKILL.md Body</strong>
+            <span class="detail">Loaded when relevant &mdash; full workflow instructions</span>
+          </div>
+        </div>
+        <div class="layer l3">
+          <div class="layer-label">L3</div>
+          <div class="layer-main">
+            <strong>Linked Files</strong>
+            <span class="detail">On demand &mdash; references/, scripts/, sub-skills</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Design Principles</div>
+      <table class="mini-table">
+        <tr>
+          <td><strong>Composability</strong></td>
+          <td>Multiple skills load simultaneously. Design skills to work alongside others.</td>
+        </tr>
+        <tr>
+          <td><strong>Portability</strong></td>
+          <td>Works across CoCo CLI and Claude Code via <code style="font-family:'JetBrains Mono',monospace;font-size:8.5px;">.claude/skills/</code> compatibility.</td>
+        </tr>
+        <tr>
+          <td><strong>Conciseness</strong></td>
+          <td>Keep SKILL.md under 500 lines. Only add what the LLM doesn't already know.</td>
+        </tr>
+      </table>
+
+      <div class="section-label">MCP + Skills = Full Stack</div>
+      <table class="mini-table">
+        <tr>
+          <th>MCP (Connectivity)</th>
+          <th>Skills (Knowledge)</th>
+        </tr>
+        <tr>
+          <td>Connects to tools &amp; services</td>
+          <td>Teaches <em>how</em> to use them</td>
+        </tr>
+        <tr>
+          <td>What CoCo <em>can</em> do</td>
+          <td>How CoCo <em>should</em> do it</td>
+        </tr>
+        <tr>
+          <td>Real-time data access</td>
+          <td>Workflows &amp; best practices</td>
+        </tr>
+      </table>
+
+    </div>
+
+    <!-- Column 3: Building & Using Skills -->
+    <div class="col">
+      <div class="col-title">
+        <span class="icon teal">3</span>
+        Building &amp; Using Skills
+      </div>
+
+      <div class="col-intro">Use the built-in <strong>$skill-development</strong> skill to create, capture, and audit skills.</div>
+
+      <div class="section-label">The Skill Creator</div>
+      <div class="callout" style="border-left-color: var(--sf-accent); padding: 4px 8px;">
+        <code>$skill-development create</code> &mdash; Scaffold a new skill from scratch<br>
+        <code>$skill-development summarize</code> &mdash; Turn a session into a reusable skill<br>
+        <code>$skill-development audit</code> &mdash; Check a skill against best practices
+      </div>
+
+      <div class="section-label">Example: Complete Skill</div>
+      <div class="dark-code"><span class="jc">---</span>
+<span class="jk">name:</span> <span class="jv">snowflake-migration</span>
+<span class="jk">description:</span> <span class="jv">"Migrate tables between schemas"</span>
+<span class="jk">tools:</span> [<span class="jv">"snowflake_sql_execute"</span>, <span class="jv">"bash"</span>]
+<span class="jc">---</span>
+# Workflow
+1. Discover source objects
+2. Generate DDL
+3. <span class="stop">STOP</span> <span class="jc">&mdash; Get user approval</span>
+4. Execute migration
+5. Validate row counts
+6. <span class="stop">STOP</span> <span class="jc">&mdash; Confirm results</span></div>
+      <p style="font-size:9px; color:var(--sf-gray-300);"><strong style="color:#FF6B6B;">STOP</strong> markers = mandatory user checkpoints before destructive actions.</p>
+
+      <div class="section-label">Notable Bundled Skills</div>
+      <div class="tags">
+        <span class="tag blue">analyzing-data</span>
+        <span class="tag teal">streamlit</span>
+        <span class="tag purple">semantic-view</span>
+        <span class="tag blue">cortex-agent</span>
+        <span class="tag teal">machine-learning</span>
+        <span class="tag purple">data-governance</span>
+        <span class="tag blue">cost-management</span>
+        <span class="tag teal">dynamic-tables</span>
+        <span class="tag purple">lineage</span>
+        <span class="tag blue">authoring-dags</span>
+        <span class="tag teal">dbt-verify</span>
+        <span class="tag purple">trust-center</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ======== FOOTER ======== -->
+  <div class="footer">
+    <span>Cortex Code Skills System &middot; March 9, 2026 Edition</span>
+    <span>Snowflake &middot; <a href="https://docs.snowflake.com/en/user-guide/cortex-code/cortex-code">docs.snowflake.com</a></span>
+  </div>
+</div>
+
+</body>
+</html>
