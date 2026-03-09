@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCP + Skills Architecture | Cortex Code for Partners</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sf-blue: #29B5E8;
+    --sf-mid-blue: #11567F;
+    --sf-dark-blue: #1B6D9C;
+    --sf-navy: #0D2B3E;
+    --sf-light-blue: #E8F7FC;
+    --sf-ice: #F4FBFE;
+    --sf-accent: #49C0AD;
+    --sf-purple: #7B61FF;
+    --sf-star-blue: #75CDD7;
+    --sf-orange: #FF9F36;
+    --sf-pink: #D45B90;
+    --sf-purple-moon: #7254A3;
+    --sf-white: #FFFFFF;
+    --sf-gray-50: #F8FAFB;
+    --sf-gray-100: #EEF2F5;
+    --sf-gray-200: #D8DFE5;
+    --sf-gray-300: #B0BBC5;
+    --sf-gray-600: #5A6872;
+    --sf-gray-800: #2D3842;
+    --sf-gray-900: #1A2530;
+    --bg: #F4F8FB;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--sf-gray-900);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Hero ───────────────────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, var(--sf-navy) 0%, var(--sf-mid-blue) 50%, var(--sf-dark-blue) 100%);
+    color: white;
+    padding: 56px 32px 44px;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(41, 181, 232, 0.15);
+    border: 1px solid rgba(41, 181, 232, 0.3);
+    color: var(--sf-blue);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    letter-spacing: -0.03em;
+  }
+  .hero h1 span { color: var(--sf-blue); }
+  .hero p {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.72);
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .hero-nav {
+    margin-top: 20px;
+  }
+  .hero-nav a {
+    color: var(--sf-blue);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .hero-nav a:hover { text-decoration: underline; }
+
+  /* ── Container ──────────────────────────────────────── */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 60px;
+  }
+
+  /* ── Section headers ────────────────────────────────── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--sf-dark-blue);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--sf-gray-900);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .section-desc {
+    font-size: 0.9rem;
+    color: var(--sf-gray-600);
+    line-height: 1.6;
+    margin-bottom: 24px;
+    max-width: 720px;
+  }
+
+  /* ── Diagram containers ─────────────────────────────── */
+  .diagram-container {
+    background: var(--sf-white);
+    border: 1px solid var(--sf-gray-200);
+    border-radius: 12px;
+    padding: 32px 32px;
+    margin-bottom: 40px;
+    overflow-x: auto;
+  }
+  .diagram-container .mermaid {
+    display: flex;
+    justify-content: center;
+    overflow: visible;
+  }
+  .diagram-container .mermaid svg {
+    overflow: visible;
+    max-width: 100%;
+    height: auto;
+  }
+  /* Prevent Mermaid node label clipping */
+  .diagram-container .mermaid svg .node foreignObject {
+    overflow: visible;
+  }
+  .diagram-container .mermaid svg .node foreignObject div {
+    padding: 0 4px;
+  }
+
+  /* ── Example cards ──────────────────────────────────── */
+  .examples-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  .example-card {
+    background: var(--sf-white);
+    border: 1px solid var(--sf-gray-200);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .example-card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    border-color: var(--sf-blue);
+  }
+  .example-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px 0;
+  }
+  .example-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .example-badge.blue { background: rgba(41,181,232,0.12); color: var(--sf-dark-blue); }
+  .example-badge.teal { background: rgba(73,192,173,0.12); color: #2A9D8F; }
+  .example-badge.purple { background: rgba(123,97,255,0.12); color: var(--sf-purple); }
+  .example-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--sf-gray-900);
+  }
+  .example-body {
+    padding: 16px 24px 20px;
+  }
+  .example-body p {
+    font-size: 0.88rem;
+    color: var(--sf-gray-600);
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+  .code-block {
+    background: var(--sf-navy);
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #C8D6E0;
+    overflow-x: auto;
+    white-space: pre;
+    margin-bottom: 12px;
+  }
+  .code-block .cmt { color: #5A7A8A; }
+  .code-block .kw { color: var(--sf-blue); }
+  .code-block .str { color: var(--sf-accent); }
+  .code-block .key { color: var(--sf-orange); }
+  .code-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--sf-gray-300);
+    margin-bottom: 8px;
+  }
+
+  /* ── Complement section ─────────────────────────────── */
+  .complement-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  .complement-card {
+    background: var(--sf-white);
+    border: 1px solid var(--sf-gray-200);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .complement-card h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .complement-card h3 .icon {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .complement-card h3 .icon.blue { background: rgba(41,181,232,0.12); color: var(--sf-dark-blue); }
+  .complement-card h3 .icon.purple { background: rgba(123,97,255,0.12); color: var(--sf-purple); }
+  .complement-card p {
+    font-size: 0.85rem;
+    color: var(--sf-gray-600);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  .complement-card ul {
+    font-size: 0.83rem;
+    color: var(--sf-gray-600);
+    line-height: 1.6;
+    padding-left: 18px;
+  }
+  .complement-card li { margin-bottom: 4px; }
+  .complement-card code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--sf-gray-100);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* ── Combined workflow ──────────────────────────────── */
+  .workflow-box {
+    background: var(--sf-white);
+    border: 1px solid var(--sf-gray-200);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 40px;
+  }
+  .workflow-box h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  /* ── Footer ─────────────────────────────────────────── */
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 0.8rem;
+    color: var(--sf-gray-600);
+    border-top: 1px solid var(--sf-gray-200);
+  }
+  footer a { color: var(--sf-dark-blue); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ── Responsive ─────────────────────────────────────── */
+  @media (max-width: 720px) {
+    .hero { padding: 40px 20px 32px; }
+    .hero h1 { font-size: 1.5rem; }
+    .complement-grid { grid-template-columns: 1fr; }
+    .container { padding: 28px 16px 40px; }
+    .diagram-container { padding: 16px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════ HERO ════════════════════════ -->
+<div class="hero">
+  <div class="hero-badge">Architecture Reference</div>
+  <h1><span>MCP + Skills</span> Architecture</h1>
+  <p>How Cortex Code connects to a partner's remote MCP server and how Skills layer domain expertise on top of MCP tool access for powerful integrations.</p>
+  <div class="hero-nav">
+    <a href="index.html">&larr; Back to Resources</a>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ════════════════════ SKILLS + MCP ═══════════════════ -->
+<div class="section-label">Core Concept</div>
+<div class="section-title">Why Skills + MCP Together</div>
+<div class="section-desc">
+  MCP gives the agent <em>access</em> to partner tools. A Skill gives the agent <em>expertise</em> on how to use them. Without a skill, the agent can still call MCP tools &mdash; but a skill ensures it follows your exact workflow, respects approval gates, and handles edge cases correctly.
+</div>
+
+<div class="complement-grid">
+  <div class="complement-card">
+    <h3><span class="icon blue">&#9670;</span> MCP (Tool Access)</h3>
+    <p>Connects Cortex Code to the partner's remote server at runtime.</p>
+    <ul>
+      <li>Exposes <strong>tools</strong> the agent can discover and call</li>
+      <li>JSON-RPC 2.0 protocol over HTTPS</li>
+      <li>Auth via headers (<code>Bearer</code>, API keys) or <strong>OAuth</strong></li>
+      <li>Config: <code>~/.snowflake/cortex/mcp.json</code></li>
+      <li>Tool naming: <code>mcp__&lt;server&gt;__&lt;tool&gt;</code></li>
+    </ul>
+  </div>
+  <div class="complement-card">
+    <h3><span class="icon purple">&#9672;</span> Skills (Domain Expertise)</h3>
+    <p>Guides <em>how</em> and <em>when</em> the agent uses those tools.</p>
+    <ul>
+      <li>Structured <strong>workflow</strong> with steps, goals, and actions</li>
+      <li>Mandatory <strong>stopping points</strong> for user approval</li>
+      <li>References MCP tools by name in instructions</li>
+      <li>Invoked with <code>$skill-name</code> or auto-triggered</li>
+      <li>Created with <code>$skill-development</code></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ════════════════════ ARCHITECTURE DIAGRAM ════════════ -->
+<div class="section-label">Architecture</div>
+<div class="section-title">Partner MCP Integration with Skills</div>
+<div class="section-desc">
+  Cortex Code acts as an MCP Host, connecting to a partner's remote MCP server over HTTPS. A custom Skill provides the domain knowledge that guides the agent on <em>how</em> and <em>when</em> to use the partner's MCP tools. The Skill orchestrates; MCP executes.
+</div>
+
+<div class="diagram-container">
+  <pre class="mermaid">
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'primaryColor': '#E8F7FC',
+    'primaryTextColor': '#0D2B3E',
+    'primaryBorderColor': '#29B5E8',
+    'secondaryColor': '#F4FBFE',
+    'tertiaryColor': '#EEF2F5',
+    'lineColor': '#29B5E8',
+    'textColor': '#1A2530',
+    'fontSize': '13px'
+  },
+  'flowchart': { 'nodeSpacing': 40, 'rankSpacing': 60, 'padding': 20 }
+}}%%
+flowchart LR
+  DEV["Developer"]
+
+  subgraph HOST["Cortex Code"]
+    direction TB
+    SKILL["Skill: $partner-sync"]
+    AGENT["AI Agent"]
+    CLIENT["MCP Client"]
+    SKILL -.- AGENT
+    AGENT --> CLIENT
+  end
+
+  subgraph REMOTE["MCP Server"]
+    direction TB
+    TOOLS["Tools"]
+  end
+
+  subgraph BACKEND["Backend"]
+    direction TB
+    API["REST APIs"]
+    DB["Databases"]
+    SVC["Services"]
+  end
+
+  DEV -->|"prompt"| SKILL
+  CLIENT <-->|"JSON-RPC over HTTPS"| TOOLS
+  TOOLS --> API
+  TOOLS --> DB
+  TOOLS --> SVC
+  AGENT -->|"response"| DEV
+
+  style DEV fill:#29B5E8,stroke:#11567F,color:#FFFFFF
+  style HOST fill:#0D2B3E,stroke:#29B5E8,color:#FFFFFF
+  style SKILL fill:#7254A3,stroke:#9B8EC4,color:#FFFFFF
+  style AGENT fill:#11567F,stroke:#29B5E8,color:#FFFFFF
+  style CLIENT fill:#1B6D9C,stroke:#29B5E8,color:#FFFFFF
+  style REMOTE fill:#E8F7FC,stroke:#29B5E8,color:#0D2B3E
+  style TOOLS fill:#FFFFFF,stroke:#29B5E8,color:#0D2B3E
+  style BACKEND fill:#FFF8F0,stroke:#FF9F36,color:#0D2B3E
+  style API fill:#FFFFFF,stroke:#FF9F36,color:#2D3842
+  style DB fill:#FFFFFF,stroke:#FF9F36,color:#2D3842
+  style SVC fill:#FFFFFF,stroke:#FF9F36,color:#2D3842
+  </pre>
+</div>
+
+<!-- ════════════════════ SEQUENCE DIAGRAM ════════════════ -->
+<div class="section-label">Protocol Flow</div>
+<div class="section-title">Skill-Guided MCP Tool Invocation</div>
+<div class="section-desc">
+  When a developer triggers the <code>$partner-sync</code> skill, Cortex Code follows the skill's workflow to discover, validate, and invoke the partner's MCP tools in sequence. The skill provides the guardrails; MCP provides the transport.
+</div>
+
+<div class="diagram-container">
+  <pre class="mermaid">
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'actorBkg': '#11567F',
+    'actorTextColor': '#FFFFFF',
+    'actorBorder': '#29B5E8',
+    'activationBkgColor': '#E8F7FC',
+    'activationBorderColor': '#29B5E8',
+    'signalColor': '#0D2B3E',
+    'signalTextColor': '#0D2B3E',
+    'noteBkgColor': '#FFF8F0',
+    'noteTextColor': '#0D2B3E',
+    'noteBorderColor': '#FF9F36',
+    'sequenceNumberColor': '#FFFFFF',
+    'fontSize': '13px'
+  },
+  'sequence': { 'mirrorActors': false, 'messageMargin': 35 }
+}}%%
+sequenceDiagram
+  participant Dev as Developer
+  participant CoCo as Cortex Code
+  participant MCP as Partner MCP Server
+  participant API as Partner Backend
+
+  Dev->>CoCo: "$partner-sync orders to analytics"
+  activate CoCo
+  Note over CoCo: Skill loaded: workflow begins
+
+  Note over CoCo,MCP: Step 1 — Discover datasets
+  CoCo->>MCP: tools/call("list_datasets")
+  MCP->>API: GET /datasets
+  API-->>MCP: [{id: "ds_17", name: "analytics"}, ...]
+  MCP-->>CoCo: datasets list
+
+  Note over CoCo,MCP: Step 2 — Validate schema
+  CoCo->>MCP: tools/call("validate_schema", {source, target})
+  MCP->>API: POST /validate
+  API-->>MCP: {compatible: true, warnings: []}
+  MCP-->>CoCo: schema validated
+
+  CoCo-->>Dev: "Schema compatible. Push 12,450 rows?"
+  Note over Dev,CoCo: Stopping point — user approval
+
+  Dev->>CoCo: "Yes, go ahead"
+
+  Note over CoCo,MCP: Step 3 — Push data
+  CoCo->>MCP: tools/call("push_data", {source, target})
+  MCP->>API: POST /sync
+  API-->>MCP: {rows: 12450, status: "complete"}
+  MCP-->>CoCo: sync result
+
+  CoCo-->>Dev: "Synced 12,450 rows to analytics dataset"
+  deactivate CoCo
+  </pre>
+</div>
+
+<!-- ════════════════════ EXAMPLE CARDS ═══════════════════ -->
+<div class="section-label">Getting Started</div>
+<div class="section-title">Connecting to a Partner's Remote MCP Server</div>
+<div class="section-desc">
+  Partners host MCP servers on their own infrastructure, exposing tools via the standard MCP protocol over HTTPS. Authentication supports Bearer tokens, API keys, and OAuth. Here are two ways to configure the connection in Cortex Code.
+</div>
+
+<div class="examples-grid">
+
+  <!-- Example 1: CLI -->
+  <div class="example-card">
+    <div class="example-header">
+      <div class="example-badge blue">1</div>
+      <h3>Add via CLI</h3>
+    </div>
+    <div class="example-body">
+      <p>The quickest way to connect. The <code>cortex mcp add</code> command registers the remote server and writes the configuration to <code>~/.snowflake/cortex/mcp.json</code>.</p>
+      <div class="code-block"><span class="cmt"># Add a partner's remote MCP server</span>
+<span class="kw">cortex mcp add</span> partner-analytics \
+  -H <span class="str">"Authorization: Bearer ${PARTNER_API_TOKEN}"</span> \
+  https://mcp.partner-platform.com/v1/mcp
+
+<span class="cmt"># Verify it's connected</span>
+<span class="kw">cortex mcp list</span>
+
+<span class="cmt"># Or use the interactive manager</span>
+<span class="kw">/mcp</span></div>
+      <p>Tools become available as <code>mcp__partner-analytics__&lt;tool_name&gt;</code> in Cortex Code. Use <code>${VAR}</code> syntax for secrets so they expand from your environment at runtime.</p>
+    </div>
+  </div>
+
+  <!-- Example 2: Config file -->
+  <div class="example-card">
+    <div class="example-header">
+      <div class="example-badge teal">2</div>
+      <h3>Configure via mcp.json</h3>
+    </div>
+    <div class="example-body">
+      <p>For repeatable setup or when configuring multiple servers, edit the config file directly. Environment variable expansion (<code>${VAR}</code>) keeps secrets out of the file.</p>
+      <div class="code-label">~/.snowflake/cortex/mcp.json</div>
+      <div class="code-block">{
+  <span class="key">"mcpServers"</span>: {
+    <span class="key">"partner-analytics"</span>: {
+      <span class="key">"url"</span>: <span class="str">"https://mcp.partner-platform.com/v1/mcp"</span>,
+      <span class="key">"headers"</span>: {
+        <span class="key">"Authorization"</span>: <span class="str">"Bearer ${PARTNER_API_TOKEN}"</span>
+      }
+    }
+  }
+}</div>
+      <p>You can also use <strong>OAuth</strong> for authentication. The <code>headers</code> field supports any standard HTTP header, including OAuth Bearer tokens obtained from your identity provider. Use <code>${VAR}</code> syntax so secrets expand from your environment at runtime.</p>
+      <p>Restart Cortex Code or use <code>/mcp</code> to reload after editing.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════ SKILL EXAMPLE ═══════════════════ -->
+<div class="section-label">Full Example</div>
+<div class="section-title">Custom Skill for Partner MCP Integration</div>
+<div class="section-desc">
+  This skill follows Cortex Code's <code>$skill-development</code> best practices: <code>name</code> and <code>description</code> in frontmatter (description includes trigger keywords), structured workflow with goals and actions per step, mandatory stopping points before destructive operations, and an output section.
+</div>
+
+<div class="workflow-box">
+  <h3>.cortex/skills/partner-sync/SKILL.md</h3>
+  <div class="code-block"><span class="cmt">---</span>
+<span class="key">name</span>: <span class="str">partner-sync</span>
+<span class="key">description</span>: |
+  <span class="str">Sync Snowflake tables to Partner Analytics Platform via MCP.</span>
+  <span class="str">Use when: syncing data to partner, pushing tables, validating</span>
+  <span class="str">schema compatibility, checking sync status.</span>
+  <span class="str">Triggers: partner sync, push to partner, sync pipeline,</span>
+  <span class="str">partner data, export to partner.</span>
+<span class="cmt">---</span>
+
+<span class="cmt"># Partner Data Sync</span>
+
+<span class="cmt">## Prerequisites</span>
+- MCP server <span class="kw">partner-analytics</span> must be configured
+- Verify with: <span class="kw">cortex mcp list</span>
+- If missing, add:
+  <span class="kw">cortex mcp add</span> partner-analytics \
+    -H "Authorization: Bearer ${PARTNER_API_TOKEN}" \
+    https://mcp.partner-platform.com/v1/mcp
+
+<span class="cmt">## Workflow</span>
+
+<span class="cmt">### Step 1: Gather Information</span>
+<span class="str">**Goal:**</span> Identify the source table and target dataset.
+<span class="str">**Actions:**</span>
+1. <span class="str">**Ask**</span> the user which Snowflake table to sync.
+2. <span class="str">**Call**</span> <span class="kw">mcp__partner-analytics__list_datasets</span>
+   to show available target datasets.
+3. <span class="str">**Ask**</span> user to confirm the target dataset.
+<span class="str">**Output:**</span> Source table ref + target dataset ID.
+
+<span class="cmt">### Step 2: Validate Compatibility</span>
+<span class="str">**Goal:**</span> Ensure schemas are compatible before pushing data.
+<span class="str">**Actions:**</span>
+1. <span class="str">**Call**</span> <span class="kw">mcp__partner-analytics__validate_schema</span>
+   with the source table schema and target dataset ID.
+2. <span class="str">**Present**</span> the validation result to the user.
+   - If warnings exist, list them clearly.
+   - If incompatible, explain why and stop.
+
+<span class="cmt">### Step 3: Push Data</span>
+<span class="str">**Goal:**</span> Sync rows from Snowflake to the partner platform.
+
+<span class="kw">⚠️ MANDATORY STOPPING POINT</span>
+Confirm with user before pushing. Show: source table,
+target dataset, row count, and any schema warnings.
+Never push without explicit user approval.
+
+<span class="str">**Actions:**</span>
+1. <span class="str">**Call**</span> <span class="kw">mcp__partner-analytics__push_data</span>
+   with the source table reference and target dataset ID.
+2. <span class="str">**Call**</span> <span class="kw">mcp__partner-analytics__get_sync_status</span>
+   to verify the sync completed successfully.
+3. <span class="str">**Report**</span> final row count and status to the user.
+
+<span class="cmt">## Stopping Points</span>
+- ✋ After Step 1 — confirm target dataset selection
+- ✋ After Step 2 — if schema warnings found
+- ✋ Before Step 3 — <span class="kw">always</span> get push approval
+
+<span class="cmt">## Output</span>
+Summary including: source table, target dataset,
+rows synced, sync status, and any warnings encountered.</div>
+</div>
+
+</div>
+
+<!-- ════════════════════ FOOTER ══════════════════════════ -->
+<footer>
+  <span>Cortex Code for Snowflake Partners &middot; March 2026</span><br>
+  <span>Maintained by Snowflake Partner Solutions Engineering &middot; <a href="mailto:randy.pettus@snowflake.com">randy.pettus@snowflake.com</a></span><br>
+  <a href="https://docs.snowflake.com/en/user-guide/cortex-code/cortex-code">Cortex Code Docs</a> &middot;
+  <a href="https://modelcontextprotocol.io">MCP Specification</a> &middot;
+  <a href="index.html">Back to Resources</a>
+</footer>
+
+<!-- ════════════════════ MERMAID CDN ════════════════════ -->
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: 'loose',
+    flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'basis', padding: 30 },
+    sequence: { useMaxWidth: false, mirrorActors: false }
+  });
+
+  // Render all diagrams, then fix clipped labels and scale to fit
+  await mermaid.run();
+
+  document.querySelectorAll('.mermaid svg').forEach(svg => {
+    // Fix any clipped node labels
+    svg.querySelectorAll('.node').forEach(node => {
+      const fo = node.querySelector('foreignObject');
+      const rect = node.querySelector('rect');
+      if (fo && rect) {
+        const textEl = fo.querySelector('div');
+        if (textEl) {
+          const needed = textEl.scrollWidth + 20;
+          const current = parseFloat(rect.getAttribute('width'));
+          if (needed > current) {
+            const diff = needed - current;
+            rect.setAttribute('width', needed);
+            rect.setAttribute('x', parseFloat(rect.getAttribute('x')) - diff / 2);
+            fo.setAttribute('width', needed);
+            fo.setAttribute('x', parseFloat(fo.getAttribute('x')) - diff / 2);
+          }
+        }
+      }
+    });
+
+    // Fix clipped subgraph/cluster labels
+    svg.querySelectorAll('.cluster').forEach(cluster => {
+      const rect = cluster.querySelector('rect');
+      const label = cluster.querySelector('.cluster-label');
+      if (rect && label) {
+        const textEl = label.querySelector('foreignObject div') || label.querySelector('text');
+        if (textEl) {
+          const needed = (textEl.scrollWidth || textEl.getBBox?.()?.width || 0) + 32;
+          const current = parseFloat(rect.getAttribute('width'));
+          if (needed > current) {
+            const diff = needed - current;
+            rect.setAttribute('width', needed);
+            rect.setAttribute('x', parseFloat(rect.getAttribute('x')) - diff / 2);
+          }
+        }
+      }
+    });
+
+    // Scale SVG to fit container: set viewBox from natural size, let CSS handle scaling
+    const w = svg.getAttribute('width') || svg.getBBox().width;
+    const h = svg.getAttribute('height') || svg.getBBox().height;
+    if (w && h) {
+      svg.setAttribute('viewBox', `0 0 ${parseFloat(w)} ${parseFloat(h)}`);
+      svg.removeAttribute('width');
+      svg.removeAttribute('height');
+      svg.style.width = '100%';
+      svg.style.height = 'auto';
+    }
+  });
+</script>
+
+</body>
+</html>
