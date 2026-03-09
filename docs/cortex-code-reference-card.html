@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cortex Code Quick Reference</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --sf-blue: #29B5E8;
+    --sf-dark-blue: #1B6D9C;
+    --sf-navy: #0D2B3E;
+    --sf-light-blue: #E8F7FC;
+    --sf-ice: #F4FBFE;
+    --sf-accent: #49C0AD;
+    --sf-purple: #7B61FF;
+    --sf-white: #FFFFFF;
+    --sf-gray-50: #F8FAFB;
+    --sf-gray-100: #EEF2F5;
+    --sf-gray-200: #D8DFE5;
+    --sf-gray-300: #B0BBC5;
+    --sf-gray-600: #5A6872;
+    --sf-gray-800: #2D3842;
+    --sf-gray-900: #1A2530;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--sf-gray-900);
+    color: var(--sf-gray-800);
+    padding: 24px;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--sf-white);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 60px rgba(0,0,0,0.25);
+  }
+
+  /* ---- Header ---- */
+  .header {
+    background: linear-gradient(135deg, var(--sf-navy) 0%, #163B52 50%, var(--sf-dark-blue) 100%);
+    padding: 20px 32px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(41,181,232,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: 28%;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(73,192,173,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header-left { position: relative; z-index: 1; }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--sf-white);
+    letter-spacing: -0.5px;
+  }
+  .header h1 .brand { color: var(--sf-blue); }
+  .header-sub {
+    margin-top: 4px;
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--sf-gray-300);
+    letter-spacing: 0.4px;
+  }
+  .header-sub .sep {
+    color: var(--sf-blue);
+    margin: 0 5px;
+    opacity: 0.5;
+  }
+  .header-right {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .snowflake-logo { width: 38px; height: 38px; opacity: 0.9; }
+  .edition-badge {
+    background: rgba(123,97,255,0.15);
+    border: 1px solid rgba(123,97,255,0.3);
+    color: var(--sf-purple);
+    font-size: 10px; font-weight: 600;
+    padding: 3px 10px; border-radius: 16px;
+    letter-spacing: 0.4px;
+  }
+
+  /* ---- Grid ---- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--sf-gray-200);
+    padding: 1px;
+  }
+
+  /* ---- Card ---- */
+  .card {
+    background: var(--sf-white);
+    padding: 12px 16px 10px;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 6px;
+  }
+  .card-num {
+    background: var(--sf-blue);
+    color: var(--sf-white);
+    font-size: 10px;
+    font-weight: 700;
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .card-num.accent { background: var(--sf-accent); }
+  .card-num.purple { background: var(--sf-purple); }
+  .card-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--sf-gray-900);
+    letter-spacing: -0.2px;
+  }
+
+  .card p, .card li {
+    font-size: 10px;
+    line-height: 1.45;
+    color: var(--sf-gray-600);
+  }
+  .card p { margin-bottom: 4px; }
+  .card ul { list-style: none; padding: 0; }
+  .card li {
+    padding-left: 12px;
+    position: relative;
+    margin-bottom: 1px;
+  }
+  .card li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 6px;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--sf-blue);
+    opacity: 0.5;
+  }
+
+  /* Code blocks */
+  .code {
+    background: var(--sf-gray-50);
+    border: 1px solid var(--sf-gray-100);
+    border-radius: var(--radius-sm);
+    padding: 5px 8px;
+    margin: 4px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    line-height: 1.5;
+    color: var(--sf-gray-800);
+    white-space: pre;
+  }
+  .code .kw { color: var(--sf-dark-blue); font-weight: 500; }
+  .code .str { color: var(--sf-accent); }
+  .code .cmt { color: var(--sf-gray-300); font-style: italic; }
+
+  /* Dark code / JSON blocks */
+  .dark-code {
+    background: var(--sf-navy);
+    color: #A8D4E6;
+    border-radius: var(--radius-sm);
+    padding: 5px 8px;
+    margin: 4px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    line-height: 1.45;
+    white-space: pre;
+  }
+  .dark-code .jk { color: var(--sf-blue); }
+  .dark-code .jv { color: var(--sf-accent); }
+  .dark-code .jc { color: #5A7A8A; font-style: italic; }
+
+  /* Tag pills */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin: 3px 0;
+  }
+  .tag {
+    font-size: 8.5px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.2px;
+  }
+  .tag.blue { background: var(--sf-light-blue); color: var(--sf-dark-blue); }
+  .tag.teal { background: #E6F9F4; color: #1B7A5A; }
+  .tag.purple { background: #F0ECFF; color: #5B46CC; }
+
+  /* Tree / hierarchy */
+  .tree {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    line-height: 1.55;
+    color: var(--sf-gray-600);
+    padding: 3px 0;
+    white-space: pre;
+  }
+  .tree .folder { color: var(--sf-dark-blue); font-weight: 500; }
+  .tree .file { color: var(--sf-gray-600); }
+  .tree .dim { color: var(--sf-gray-300); }
+
+  /* Key-value table */
+  .kv-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 3px 0;
+  }
+  .kv-table td {
+    font-size: 9.5px;
+    padding: 2px 0;
+    vertical-align: top;
+  }
+  .kv-table td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    color: var(--sf-gray-800);
+    white-space: nowrap;
+    padding-right: 10px;
+    width: 1%;
+    font-size: 9px;
+  }
+  .kv-table td:last-child {
+    color: var(--sf-gray-600);
+  }
+
+  /* Callout */
+  .callout {
+    background: var(--sf-ice);
+    border-left: 3px solid var(--sf-blue);
+    padding: 4px 8px;
+    margin: 4px 0;
+    font-size: 9.5px;
+    color: var(--sf-gray-600);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    line-height: 1.4;
+  }
+  .callout strong { color: var(--sf-gray-800); }
+  .callout code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    background: rgba(41,181,232,0.08);
+    padding: 0 3px;
+    border-radius: 2px;
+  }
+  .callout.accent { border-left-color: var(--sf-accent); }
+  .callout.purple { border-left-color: var(--sf-purple); }
+
+  /* Section sub-label */
+  .sub-label {
+    font-size: 8.5px;
+    font-weight: 700;
+    color: var(--sf-gray-300);
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    margin: 5px 0 2px;
+    padding-top: 4px;
+    border-top: 1px solid var(--sf-gray-100);
+  }
+
+  /* Inline code in prose */
+  .card code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    background: var(--sf-gray-50);
+    border: 1px solid var(--sf-gray-100);
+    padding: 0 3px;
+    border-radius: 2px;
+  }
+
+  /* Footer */
+  .footer {
+    background: var(--sf-gray-50);
+    border-top: 1px solid var(--sf-gray-200);
+    padding: 6px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9px;
+    color: var(--sf-gray-300);
+  }
+  .footer a { color: var(--sf-blue); text-decoration: none; }
+
+  @media print {
+    body { padding: 0; background: white; }
+    .page { box-shadow: none; border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <!-- ======== HEADER ======== -->
+  <div class="header">
+    <div class="header-left">
+      <h1><span class="brand">Cortex Code</span> Quick Reference</h1>
+      <div class="header-sub">
+        Snowflake CLI<span class="sep">&middot;</span>SQL<span class="sep">&middot;</span>Semantic Views<span class="sep">&middot;</span>Skills<span class="sep">&middot;</span>Agents<span class="sep">&middot;</span>Airflow<span class="sep">&middot;</span>dbt<span class="sep">&middot;</span>MCP
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="edition-badge">March 2026 Edition</div>
+      <svg class="snowflake-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 5 L50 95 M15 27.5 L85 72.5 M85 27.5 L15 72.5" stroke="#29B5E8" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="50" cy="5" r="5" fill="#29B5E8"/>
+        <circle cx="50" cy="95" r="5" fill="#29B5E8"/>
+        <circle cx="15" cy="27.5" r="5" fill="#29B5E8"/>
+        <circle cx="85" cy="72.5" r="5" fill="#29B5E8"/>
+        <circle cx="85" cy="27.5" r="5" fill="#29B5E8"/>
+        <circle cx="15" cy="72.5" r="5" fill="#29B5E8"/>
+        <circle cx="50" cy="50" r="7" fill="#29B5E8"/>
+        <circle cx="50" cy="28" r="4" fill="#29B5E8"/>
+        <circle cx="50" cy="72" r="4" fill="#29B5E8"/>
+        <circle cx="31" cy="39" r="4" fill="#29B5E8"/>
+        <circle cx="69" cy="61" r="4" fill="#29B5E8"/>
+        <circle cx="69" cy="39" r="4" fill="#29B5E8"/>
+        <circle cx="31" cy="61" r="4" fill="#29B5E8"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ======== GRID ======== -->
+  <div class="grid">
+
+    <!-- ============ COLUMN 1 ============ -->
+
+    <!-- 1. Getting Started -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">1</div>
+        <div class="card-title">Getting Started</div>
+      </div>
+      <div class="code"><span class="cmt"># Install</span>
+<span class="kw">curl</span> -LsS https://ai.snowflake.com/static/cc-scripts/install.sh | <span class="kw">sh</span>
+
+<span class="cmt"># Start interactive REPL</span>
+<span class="kw">cortex</span>
+
+<span class="cmt"># Non-interactive</span>
+<span class="kw">cortex</span> -p <span class="str">"summarize README.md"</span>
+
+<span class="cmt"># Use a specific connection</span>
+<span class="kw">cortex</span> --connection my_prod
+
+<span class="cmt"># Resume last session</span>
+<span class="kw">cortex</span> --resume last</div>
+      <p>Run <code>/doctor</code> to diagnose environment issues. List connections with <code>cortex connections list</code>.</p>
+    </div>
+
+    <!-- 2. AGENTS.md & Project Context -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">2</div>
+        <div class="card-title">AGENTS.md &amp; Project Context</div>
+      </div>
+      <p><strong>AGENTS.md</strong> is CoCo's persistent project memory &mdash; loaded automatically at session start. Part of the open agents.md framework.</p>
+      <div class="code"><span class="cmt"># Project: DataPipeline</span>
+Snowflake + dbt + Airflow
+<span class="cmt">## Commands</span>
+dbt build --select tag:daily
+<span class="cmt">## Rules</span>
+All SQL must use QUALIFY for dedup
+Never DROP without confirmation</div>
+      <div class="sub-label">File Priority (first wins)</div>
+      <table class="kv-table">
+        <tr><td>.cortex/AGENTS.md</td><td>Project-level (shared via git)</td></tr>
+        <tr><td>.claude/CLAUDE.md</td><td>Compatibility with Claude Code</td></tr>
+        <tr><td>~/.snowflake/cortex/</td><td>Global &mdash; all projects</td></tr>
+      </table>
+    </div>
+
+    <!-- 3. Special Input Syntax -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">3</div>
+        <div class="card-title">Special Input Syntax</div>
+      </div>
+      <table class="kv-table">
+        <tr><td>@path</td><td>Include file as context</td></tr>
+        <tr><td>@path$10-50</td><td>Include specific line range</td></tr>
+        <tr><td>#DB.SCHEMA.TABLE</td><td>Auto-inject schema + sample rows</td></tr>
+        <tr><td>$skill-name</td><td>Invoke a skill</td></tr>
+        <tr><td>!command</td><td>Run shell cmd (output &rarr; agent)</td></tr>
+        <tr><td>/command</td><td>Slash command</td></tr>
+        <tr><td>?</td><td>Quick help overlay</td></tr>
+      </table>
+      <div class="callout accent">
+        <strong>#TABLE</strong> is a CoCo superpower &mdash; auto-injects column metadata, primary keys, and sample rows. No other coding assistant does this.
+      </div>
+    </div>
+
+    <!-- 4. Snowflake-Native Tools -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num accent">4</div>
+        <div class="card-title">Snowflake-Native Tools</div>
+      </div>
+      <table class="kv-table">
+        <tr><td>/sql SELECT ...</td><td>Execute SQL inline</td></tr>
+        <tr><td>/table</td><td>Fullscreen SQL results viewer</td></tr>
+        <tr><td>#TABLE</td><td>Inject column metadata + samples</td></tr>
+        <tr><td>cortex search object</td><td>Semantic object search</td></tr>
+        <tr><td>cortex search docs</td><td>Search Snowflake docs</td></tr>
+        <tr><td>cortex artifact create</td><td>Push to Snowflake Workspace</td></tr>
+      </table>
+      <div class="sub-label">Cortex Analyst &amp; Semantic Views</div>
+      <div class="code"><span class="kw">cortex analyst query</span> <span class="str">"revenue by month"</span> \
+  --view=ANALYTICS.CORE.REVENUE
+<span class="kw">cortex semantic-views</span> discover
+<span class="kw">cortex semantic-views</span> describe DB.SCHEMA.VIEW</div>
+      <div class="sub-label">Auth Methods</div>
+      <div class="tags">
+        <span class="tag teal">externalbrowser</span>
+        <span class="tag teal">snowflake_jwt</span>
+        <span class="tag teal">oauth</span>
+        <span class="tag teal">PAT</span>
+      </div>
+    </div>
+
+    <!-- ============ COLUMN 2 ============ -->
+
+    <!-- 5. Essential Shortcuts & Modes -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">5</div>
+        <div class="card-title">Essential Shortcuts &amp; Modes</div>
+      </div>
+      <table class="kv-table">
+        <tr><td>Enter</td><td>Submit prompt</td></tr>
+        <tr><td>Ctrl+J</td><td>Newline in prompt</td></tr>
+        <tr><td>Shift+Tab</td><td>Cycle permission modes</td></tr>
+        <tr><td>Ctrl+P</td><td>Toggle plan mode</td></tr>
+        <tr><td>Ctrl+B</td><td>Background bash</td></tr>
+        <tr><td>Ctrl+T</td><td>SQL table results view</td></tr>
+        <tr><td>Ctrl+G</td><td>Web search results</td></tr>
+        <tr><td>Ctrl+O</td><td>Cycle display (compact/expanded)</td></tr>
+        <tr><td>Ctrl+R</td><td>Search prompt history</td></tr>
+        <tr><td>Escape</td><td>Cancel streaming</td></tr>
+      </table>
+      <div class="sub-label">Permission Modes</div>
+      <p><strong>Confirm Actions</strong> (default) &mdash; approve each tool &bull; <strong>Plan</strong> (<code>Ctrl+P</code>) &mdash; review before executing &bull; <strong>Bypass</strong> (<code>/bypass</code>) &mdash; auto-approve all. <code>Shift+Tab</code> cycles Confirm &harr; Bypass.</p>
+    </div>
+
+    <!-- 6. Slash Commands -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">6</div>
+        <div class="card-title">Slash Commands</div>
+      </div>
+      <div class="sub-label" style="border-top:none; margin-top:0; padding-top:0;">Session</div>
+      <div class="code" style="margin-top:2px"><span class="kw">/new</span>  <span class="kw">/fork</span>  <span class="kw">/resume</span>  <span class="kw">/rewind</span>  <span class="kw">/compact</span>  <span class="kw">/rename</span></div>
+      <div class="sub-label">Snowflake</div>
+      <div class="code" style="margin-top:2px"><span class="kw">/sql</span>  <span class="kw">/table</span>  <span class="kw">/connections</span></div>
+      <div class="sub-label">Config</div>
+      <div class="code" style="margin-top:2px"><span class="kw">/settings</span>  <span class="kw">/mcp</span>  <span class="kw">/skill</span>  <span class="kw">/hooks</span>  <span class="kw">/theme</span></div>
+      <div class="sub-label">Utilities</div>
+      <div class="code" style="margin-top:2px"><span class="kw">/diff</span>  <span class="kw">/agents</span>  <span class="kw">/fdbt</span>  <span class="kw">/lineage</span>  <span class="kw">/sh</span>  <span class="kw">/sandbox</span></div>
+      <div class="sub-label">Info</div>
+      <div class="code" style="margin-top:2px"><span class="kw">/help</span>  <span class="kw">/status</span>  <span class="kw">/commands</span>  <span class="kw">/doctor</span></div>
+    </div>
+
+    <!-- 7. Skills System -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num purple">7</div>
+        <div class="card-title">Skills System</div>
+      </div>
+      <p>Skills are reusable markdown instruction sets. Invoke with <code>$skill-name</code>, manage with <code>/skill</code>.</p>
+      <div class="dark-code"><span class="jc">---</span>
+<span class="jk">name:</span> <span class="jv">my-skill</span>
+<span class="jk">description:</span> <span class="jv">"Purpose. Use when: X. Triggers: Y."</span>
+<span class="jk">tools:</span> [<span class="jv">"bash"</span>, <span class="jv">"edit"</span>]
+<span class="jc">---</span>
+# Workflow
+1. Step one ...
+2. STOP &mdash; get user approval</div>
+      <div class="sub-label">Locations (priority order)</div>
+      <table class="kv-table">
+        <tr><td>.cortex/skills/</td><td>Project-level</td></tr>
+        <tr><td>~/.snowflake/cortex/skills/</td><td>Global</td></tr>
+        <tr><td>Remote repos</td><td>Auto-cached from git</td></tr>
+        <tr><td>Bundled</td><td>Ships with CoCo</td></tr>
+      </table>
+      <div class="sub-label">Skill Creator</div>
+      <p><code>$skill-development create</code> &bull; <code>summarize</code> &bull; <code>audit</code></p>
+      <div class="tags" style="margin-top:3px;">
+        <span class="tag blue">analyzing-data</span>
+        <span class="tag teal">streamlit</span>
+        <span class="tag purple">semantic-view</span>
+        <span class="tag blue">cortex-agent</span>
+        <span class="tag teal">machine-learning</span>
+        <span class="tag purple">data-governance</span>
+      </div>
+    </div>
+
+    <!-- 8. Data Ecosystem Workflows -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num accent">8</div>
+        <div class="card-title">Data Ecosystem Workflows</div>
+      </div>
+      <div class="sub-label" style="border-top:none; margin-top:0; padding-top:0;">Airflow</div>
+      <div class="code" style="margin-top:2px"><span class="kw">cortex airflow</span> dags list
+<span class="kw">cortex airflow</span> dags explore &lt;dag_id&gt;
+<span class="kw">cortex airflow</span> runs trigger-wait &lt;dag_id&gt;
+<span class="kw">cortex airflow</span> tasks logs &lt;dag&gt; &lt;task&gt; &lt;run&gt;</div>
+      <div class="tags">
+        <span class="tag teal">$authoring-dags</span>
+        <span class="tag teal">$testing-dags</span>
+        <span class="tag teal">$debugging-dags</span>
+        <span class="tag teal">$cosmos-dbt-core</span>
+      </div>
+      <div class="sub-label">dbt</div>
+      <div class="code" style="margin-top:2px"><span class="kw">cortex fdbt</span> info     <span class="cmt"># project overview</span>
+<span class="kw">cortex fdbt</span> list     <span class="cmt"># list models</span>
+<span class="kw">cortex fdbt</span> lineage  <span class="cmt"># trace dependencies</span></div>
+      <p><code>$dbt-verify</code> agent validates beyond <code>dbt build</code>. Snowflake-native: <code>snow dbt deploy/execute</code>.</p>
+    </div>
+
+    <!-- ============ COLUMN 3 ============ -->
+
+    <!-- 9. Agents & Subagents -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num purple">9</div>
+        <div class="card-title">Agents &amp; Subagents</div>
+      </div>
+      <table class="kv-table">
+        <tr><td>general-purpose</td><td>Full tool access &mdash; research, code, multi-step</td></tr>
+        <tr><td>Explore</td><td>Fast read-only codebase search</td></tr>
+        <tr><td>Plan</td><td>Architecture design, no code changes</td></tr>
+        <tr><td>dbt-verify</td><td>dbt project validation</td></tr>
+        <tr><td>feedback</td><td>Collect &amp; process user feedback</td></tr>
+      </table>
+      <div class="sub-label">Custom Agents</div>
+      <p>Add <code>.cortex/agents/&lt;name&gt;.md</code> with YAML frontmatter (name, description, tools).</p>
+      <div class="sub-label">Parallel Work</div>
+      <p>Run agents in background, check with <code>/agents</code>. Worktree isolation: <code>/worktree</code> for parallel dev without conflicts.</p>
+      <div class="sub-label">Task Tracking</div>
+      <div class="code" style="margin-top:2px"><span class="kw">cortex ctx</span> task add <span class="str">"Fix auth bug"</span>
+<span class="kw">cortex ctx</span> step add <span class="str">"Read auth.ts"</span> -t &lt;id&gt;
+<span class="kw">cortex ctx</span> step done &lt;id&gt;</div>
+    </div>
+
+    <!-- 10. MCP Integration -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num accent">10</div>
+        <div class="card-title">MCP Integration</div>
+      </div>
+      <p>Model Context Protocol connects external tools &amp; services to CoCo.</p>
+      <div class="code"><span class="cmt"># Add a stdio server</span>
+<span class="kw">cortex mcp add</span> &lt;name&gt; -- npx -y @scope/mcp-server
+
+<span class="cmt"># With env vars</span>
+<span class="kw">cortex mcp add</span> &lt;name&gt; -e API_KEY=secret -- &lt;cmd&gt;
+
+<span class="cmt"># SSE remote server</span>
+<span class="kw">cortex mcp add</span> &lt;name&gt; --transport sse https://...
+
+<span class="cmt"># With auth headers</span>
+<span class="kw">cortex mcp add</span> &lt;name&gt; --transport sse \
+  -H <span class="str">"Authorization: Bearer token"</span> https://...</div>
+      <div class="sub-label">Managing</div>
+      <table class="kv-table">
+        <tr><td>cortex mcp list</td><td>Show configured servers</td></tr>
+        <tr><td>cortex mcp remove</td><td>Remove a server</td></tr>
+        <tr><td>/mcp</td><td>Interactive MCP manager</td></tr>
+        <tr><td>--no-mcp</td><td>Disable all MCP servers</td></tr>
+      </table>
+      <p>Config: <code>~/.snowflake/cortex/mcp.json</code>. Tool naming: <code>mcp__&lt;server&gt;__&lt;tool&gt;</code>. Transports: <strong>stdio</strong>, <strong>sse</strong>, <strong>http</strong>.</p>
+    </div>
+
+    <!-- 11. Hooks & Safety -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num purple">11</div>
+        <div class="card-title">Hooks &amp; Safety</div>
+      </div>
+      <p>Hooks add deterministic guardrails. Config: <code>~/.snowflake/cortex/hooks.json</code></p>
+      <div class="tags" style="margin-bottom:3px;">
+        <span class="tag blue">PreToolUse</span>
+        <span class="tag teal">PostToolUse</span>
+        <span class="tag purple">SessionStart</span>
+        <span class="tag blue">Stop</span>
+        <span class="tag teal">UserPromptSubmit</span>
+      </div>
+      <div class="dark-code"><span class="jk">"hooks"</span>: {
+  <span class="jk">"PreToolUse"</span>: [{
+    <span class="jk">"matcher"</span>: <span class="jv">"Bash"</span>,
+    <span class="jk">"hooks"</span>: [{
+      <span class="jk">"type"</span>: <span class="jv">"command"</span>,
+      <span class="jk">"command"</span>: <span class="jv">"scripts/validate.sh"</span>,
+      <span class="jk">"timeout"</span>: <span class="jv">5</span>
+    }]
+  }]
+}</div>
+      <p>Exit codes: <strong>0</strong> = allow &bull; <strong>2</strong> = block (stderr &rarr; agent). Matchers: exact, regex (<code>snowflake_.*</code>), wildcard.</p>
+    </div>
+
+    <!-- 12. Configuration & Project Layout -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-num">12</div>
+        <div class="card-title">Configuration &amp; Project Layout</div>
+      </div>
+      <div class="tree"><span class="folder">~/.snowflake/</span>
+  <span class="file">connections.toml</span>       <span class="dim"># Snowflake connections</span>
+  <span class="folder">cortex/</span>
+    <span class="file">settings.json</span>        <span class="dim"># Main config</span>
+    <span class="file">mcp.json</span>             <span class="dim"># MCP servers</span>
+    <span class="file">hooks.json</span>           <span class="dim"># Hook definitions</span>
+    <span class="file">skills.json</span>          <span class="dim"># Skill preferences</span>
+    <span class="file">permissions.json</span>     <span class="dim"># Auto-generated</span>
+    <span class="folder">skills/</span>              <span class="dim"># Global skills</span>
+    <span class="folder">agents/</span>              <span class="dim"># Custom agents</span>
+
+<span class="folder">your-project/</span>
+  <span class="file">AGENTS.md</span>              <span class="dim"># Project context</span>
+  <span class="folder">.cortex/</span>
+    <span class="folder">skills/</span>              <span class="dim"># Project skills</span>
+    <span class="folder">agents/</span>              <span class="dim"># Project agents</span>
+    <span class="folder">commands/</span>            <span class="dim"># Custom slash cmds</span>
+    <span class="file">settings.json</span>        <span class="dim"># Project settings</span></div>
+      <div class="sub-label">Config Priority</div>
+      <p>CLI flags &gt; env vars &gt; settings.json &gt; defaults</p>
+      <div class="sub-label">Key Env Vars</div>
+      <table class="kv-table">
+        <tr><td>SNOWFLAKE_CONNECTION</td><td>Default connection name</td></tr>
+        <tr><td>CORTEX_ENABLE_MEMORY</td><td>Enable persistent memory</td></tr>
+        <tr><td>CORTEX_CODE_STREAMING</td><td>Toggle streaming output</td></tr>
+        <tr><td>CORTEX_AGENT_ENABLE_SUBAGENTS</td><td>Enable subagents</td></tr>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ======== FOOTER ======== -->
+  <div class="footer">
+    <span>Cortex Code Quick Reference &middot; March 2026 Edition</span>
+    <span>Snowflake &middot; <a href="https://docs.snowflake.com/en/user-guide/cortex-code/cortex-code">docs.snowflake.com</a></span>
+  </div>
+</div>
+
+</body>
+</html>
