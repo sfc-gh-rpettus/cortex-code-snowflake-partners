@@ -9,12 +9,17 @@
 
   :root {
     --sf-blue: #29B5E8;
+    --sf-mid-blue: #11567F;
     --sf-dark-blue: #1B6D9C;
     --sf-navy: #0D2B3E;
     --sf-light-blue: #E8F7FC;
     --sf-ice: #F4FBFE;
     --sf-accent: #49C0AD;
     --sf-purple: #7B61FF;
+    --sf-star-blue: #75CDD7;
+    --sf-orange: #FF9F36;
+    --sf-pink: #D45B90;
+    --sf-purple-moon: #7254A3;
     --sf-white: #FFFFFF;
     --sf-gray-50: #F8FAFB;
     --sf-gray-100: #EEF2F5;
@@ -48,7 +53,7 @@
 
   /* ---- Header ---- */
   .header {
-    background: linear-gradient(135deg, var(--sf-navy) 0%, #163B52 50%, var(--sf-dark-blue) 100%);
+    background: linear-gradient(135deg, var(--sf-navy) 0%, var(--sf-mid-blue) 50%, var(--sf-dark-blue) 100%);
     padding: 20px 32px 16px;
     display: flex;
     align-items: center;
@@ -138,8 +143,6 @@
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
   }
-  .card-num.accent { background: var(--sf-accent); }
-  .card-num.purple { background: var(--sf-purple); }
   .card-title {
     font-size: 12px;
     font-weight: 700;
@@ -425,7 +428,7 @@ Never DROP without confirmation</div>
     <!-- 4. Snowflake-Native Tools -->
     <div class="card">
       <div class="card-header">
-        <div class="card-num accent">4</div>
+        <div class="card-num">4</div>
         <div class="card-title">Snowflake-Native Tools</div>
       </div>
       <table class="kv-table">
@@ -495,7 +498,7 @@ Never DROP without confirmation</div>
     <!-- 7. Skills System -->
     <div class="card">
       <div class="card-header">
-        <div class="card-num purple">7</div>
+        <div class="card-num">7</div>
         <div class="card-title">Skills System</div>
       </div>
       <p>Skills are reusable markdown instruction sets. Invoke with <code>$skill-name</code>, manage with <code>/skill</code>.</p>
@@ -529,7 +532,7 @@ Never DROP without confirmation</div>
     <!-- 8. Data Ecosystem Workflows -->
     <div class="card">
       <div class="card-header">
-        <div class="card-num accent">8</div>
+        <div class="card-num">8</div>
         <div class="card-title">Data Ecosystem Workflows</div>
       </div>
       <div class="sub-label" style="border-top:none; margin-top:0; padding-top:0;">Airflow</div>
@@ -555,7 +558,7 @@ Never DROP without confirmation</div>
     <!-- 9. Agents & Subagents -->
     <div class="card">
       <div class="card-header">
-        <div class="card-num purple">9</div>
+        <div class="card-num">9</div>
         <div class="card-title">Agents &amp; Subagents</div>
       </div>
       <table class="kv-table">
@@ -578,7 +581,7 @@ Never DROP without confirmation</div>
     <!-- 10. MCP Integration -->
     <div class="card">
       <div class="card-header">
-        <div class="card-num accent">10</div>
+        <div class="card-num">10</div>
         <div class="card-title">MCP Integration</div>
       </div>
       <p>Model Context Protocol connects external tools &amp; services to CoCo.</p>
@@ -607,7 +610,7 @@ Never DROP without confirmation</div>
     <!-- 11. Hooks & Safety -->
     <div class="card">
       <div class="card-header">
-        <div class="card-num purple">11</div>
+        <div class="card-num">11</div>
         <div class="card-title">Hooks &amp; Safety</div>
       </div>
       <p>Hooks add deterministic guardrails. Config: <code>~/.snowflake/cortex/hooks.json</code></p>
