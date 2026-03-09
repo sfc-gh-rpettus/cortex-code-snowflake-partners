@@ -2,14 +2,14 @@
 
 Quick reference materials and examples to help Snowflake partners and ISVs build effectively with [Cortex Code](https://docs.snowflake.com/en/user-guide/cortex-code/cortex-code), Snowflake's AI coding assistant for the data ecosystem.
 
-**[View the resources site](https://sfc-gh-rpettus.github.io/cortex-code-snowflake-isvs/)**
+**[View the resources site](https://sfc-gh-rpettus.github.io/cortex-code-snowflake-partners/)**
 
 ## What's Included
 
 ### Reference Materials (`docs/`)
 
-- **[Quick Reference Card](https://sfc-gh-rpettus.github.io/cortex-code-snowflake-isvs/cortex-code-reference-card.html)** — 12-section cheat sheet covering commands, shortcuts, skills, MCP integration, Airflow & dbt workflows, agents, hooks, and configuration.
-- **[Skills System Deep Dive](https://sfc-gh-rpettus.github.io/cortex-code-snowflake-isvs/cortex-code-skills-system.html)** — Visual reference for the progressive disclosure skill architecture, creation workflow, and bundled skill catalog.
+- **[Quick Reference Card](https://sfc-gh-rpettus.github.io/cortex-code-snowflake-partners/cortex-code-reference-card.html)** — 12-section cheat sheet covering commands, shortcuts, skills, MCP integration, Airflow & dbt workflows, agents, hooks, and configuration.
+- **[Skills System Deep Dive](https://sfc-gh-rpettus.github.io/cortex-code-snowflake-partners/cortex-code-skills-system.html)** — Visual reference for the progressive disclosure skill architecture, creation workflow, and bundled skill catalog.
 
 ### Examples (`examples/`)
 
